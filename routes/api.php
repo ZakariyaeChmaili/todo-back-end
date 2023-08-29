@@ -25,3 +25,8 @@ Route::post('todos/deleteMany', 'App\Http\Controllers\TodoController@deleteMany'
 Route::middleware('auth:sanctum')->group(function () {
     Route::post("logout", "App\Http\Controllers\AuthController@logout");
 });
+
+Route::get('/', function () {
+    return 'test';
+
+});
