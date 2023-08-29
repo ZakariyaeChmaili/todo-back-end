@@ -22,18 +22,21 @@ class AuthController extends Controller
     public function login(Request $request)
     {
 
-        if (auth()->attempt($request->only(["username", "password"]))) {
-            $token = auth()->user()->createToken('authToken')->plainTextToken;
-            return response()->json(
-                [
-                    'token' => $token,
-                ]
-            );
-        } else {
+       $user= User::where('username' , $request->username)->first();
+        if($user){
+            if(Hash::check($request->password,$user->password)){
+                return response()->json(
+                    [
+                        'token' => $user->createToken($request->username)->plainTextToken,
+                    ]
+                    );
+            }
+        }
+
             return response()->json([
                 "msg" => "Invalid credentials"
             ], 401);
-        }
+        
     }
 
 
