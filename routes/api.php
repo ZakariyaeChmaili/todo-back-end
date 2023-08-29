@@ -25,3 +25,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource("todos", "App\Http\Controllers\TodoController");
     Route::post("logout", "App\Http\Controllers\AuthController@logout");
 });
+
+Route::get('/', function () {
+    return 'test';
+
+});
