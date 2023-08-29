@@ -20,8 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post("register", "App\Http\Controllers\AuthController@register");
 Route::post("login", "App\Http\Controllers\AuthController@login");
-
+Route::apiResource("todos", "App\Http\Controllers\TodoController");
+Route::post('todos/deleteMany', 'App\Http\Controllers\TodoController@deleteMany');
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource("todos", "App\Http\Controllers\TodoController");
     Route::post("logout", "App\Http\Controllers\AuthController@logout");
 });

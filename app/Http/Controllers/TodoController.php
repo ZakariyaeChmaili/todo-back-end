@@ -15,7 +15,12 @@ class TodoController extends Controller
      */
     public function index()
     {
-        return Todo::all();
+        $todos = Todo::where('parent_id', null)->get();
+        foreach ($todos as $todo){
+            $todo->subtasks = Todo::where('parent_id', $todo->_id)->get();
+        }
+        return $todos;
+
     }
 
     /**
@@ -26,8 +31,28 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
+        $todo = new Todo();
+        $todo->task = $request->task;
+        $id =Todo::create([
+            'task' => $request->task,
+            'user_id' => 1,
+            'completed' => false
+        ])->_id;
 
-        return Todo::create($request->all());
+      if($request->subtasks){
+          foreach ($request->subtasks as $subtask){
+              Todo::create([
+                  'task' => $subtask,
+                  'parent_id' => $id,
+                  'completed' => false
+              ]);
+          }
+      }
+        return response()->json([
+            'message' => 'Todo created successfully',
+            'id' => $id
+        ], 201);
+
     }
 
     /**
@@ -67,5 +92,15 @@ class TodoController extends Controller
     public function destroy($id)
     {
         return Todo::destroy($id);
+    }
+
+
+    public function deleteMant(Request $request){
+        $ids = $request->ids;
+        dd($ids)
+        // Todo::whereIn('_id', $ids)->delete();
+
+
+
     }
 }
